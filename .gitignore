@@ -1,0 +1,42 @@
+# Archivos y carpetas generados por la compilación
+bin/
+obj/
+*.csproj.user
+*.user
+*.suo
+*.cache
+*.pdb
+
+# Archivos de configuración sensibles
+appsettings.json
+appsettings.*.json
+*.config
+
+# Archivos de Visual Studio y VS Code
+.vs/
+.vscode/
+*.sln.ide
+*.sln.iml
+
+# Archivos de pruebas y paquetes
+packages/
+TestResults/
+*.nupkg
+
+# Archivos de entorno local
+*.env
+*.local
+
+# Carpetas de publicación
+publish/
+wwwroot/
+
+# Archivos de logs
+*.log
+Logs/
+
+# Archivos temporales
+*~
+*.swp
+*.bak
+*.tmp
