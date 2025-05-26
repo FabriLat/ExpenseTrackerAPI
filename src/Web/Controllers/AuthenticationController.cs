@@ -19,6 +19,17 @@ namespace Web.Controllers
             _config = config;
         }
 
+        /// <summary>
+        /// Autentica a un usuario y devuelve un token JWT.
+        /// </summary>
+        /// <param name="authenticationRequest">Credenciales del usuario (email y contraseña).</param>
+        /// <returns>Un token JWT como string.</returns>
+        /// <response code="200">Autenticación exitosa, devuelve el token JWT.</response>
+        /// <response code="400">Credenciales inválidas o error en la autenticación.</response>
+        /// <remarks>
+        /// Este endpoint no requiere autenticación previa. Proporciona un token JWT que puede usarse en endpoints protegidos.
+        /// </remarks>  
+
         [HttpPost]
         public ActionResult<string> Authenticate([FromBody] AuthenticationRequest authenticationRequest)
         {

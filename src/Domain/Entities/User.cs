@@ -39,7 +39,7 @@ public partial class User
     public virtual ICollection<Expense> Expenses { get; set; } = new List<Expense>();
 
     [InverseProperty("Owner")]
-    public virtual ICollection<Group> Groups { get; set; } = new List<Group>();
+    public virtual ICollection<Team> Teams { get; set; } = new List<Team>();
 
     [InverseProperty("InvitedUser")]
     public virtual ICollection<Invitation> InvitationInvitedUsers { get; set; } = new List<Invitation>();
@@ -49,5 +49,5 @@ public partial class User
 
     [ForeignKey("UserId")]
     [InverseProperty("Users")]
-    public virtual ICollection<Group> GroupsNavigation { get; set; } = new List<Group>();
+    public virtual ICollection<Team> TeamsNavigation { get; set; } = new List<Team>();
 }

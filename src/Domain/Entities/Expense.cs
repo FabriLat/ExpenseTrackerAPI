@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Domain.Entities;
 
 [Table("expenses")]
-[Index("GroupId", Name = "group_Id_idx")]
+[Index("TeamId", Name = "team_Id_idx")]
 [Index("UserId", Name = "user_id_idx")]
 public partial class Expense
 {
@@ -33,12 +33,12 @@ public partial class Expense
     [Column("expense_date")]
     public DateOnly ExpenseDate { get; set; }
 
-    [Column("group_id")]
-    public int? GroupId { get; set; }
+    [Column("team_id")]
+    public int? TeamId { get; set; }
 
-    [ForeignKey("GroupId")]
+    [ForeignKey("TeamId")]
     [InverseProperty("Expenses")]
-    public virtual Group? Group { get; set; }
+    public virtual Team? Team { get; set; }
 
     [ForeignKey("UserId")]
     [InverseProperty("Expenses")]

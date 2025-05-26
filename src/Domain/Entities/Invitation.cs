@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Domain.Entities;
 
 [Table("invitations")]
-[Index("GroupId", Name = "fk_invitations_groups")]
+[Index("TeamId", Name = "fk_invitations_teams")]
 [Index("InvitedUserId", Name = "id_invited_idx")]
 [Index("OwnerUserId", Name = "owner_user_id_idx")]
 public partial class Invitation
@@ -23,12 +23,12 @@ public partial class Invitation
     [Column("invited_user_id")]
     public int InvitedUserId { get; set; }
 
-    [Column("group_id")]
-    public int GroupId { get; set; }
+    [Column("team_id")]
+    public int TeamId { get; set; }
 
-    [ForeignKey("GroupId")]
+    [ForeignKey("TeamId")]
     [InverseProperty("Invitations")]
-    public virtual Group Group { get; set; } = null!;
+    public virtual Team Team { get; set; } = null!;
 
     [ForeignKey("InvitedUserId")]
     [InverseProperty("InvitationInvitedUsers")]

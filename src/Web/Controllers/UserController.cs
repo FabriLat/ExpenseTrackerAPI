@@ -17,6 +17,11 @@ namespace Web.Controllers
             _userService = UserService;
         }
 
+        /// <summary>
+        /// Obtiene la lista de todos los usuarios.
+        /// </summary>
+        /// <returns>Una lista de usuarios.</returns>
+        /// <response code="200">Devuelve la lista de usuarios.</response>
         [HttpGet]
         public ActionResult<List<UserDTO>>? GetAll()
         {
@@ -25,6 +30,13 @@ namespace Web.Controllers
         }
 
 
+        /// <summary>
+        /// Obtiene un usuario por su ID.
+        /// </summary>
+        /// <param name="id">El ID del usuario.</param>
+        /// <returns>El usuario encontrado.</returns>
+        /// <response code="200">Usuario encontrado.</response>
+        /// <response code="404">Usuario no encontrado.</response>
         [HttpGet("{id}")]
         public ActionResult<UserDTO?> Get(int id)
         {
@@ -36,6 +48,18 @@ namespace Web.Controllers
             return NotFound();
         }
 
+
+        /// <summary>
+        /// Crea un nuevo usuario.
+        /// </summary>
+        /// <param name="newUserData">Datos del nuevo usuario.</param>
+        /// <returns>El usuario creado.</returns>
+        /// <response code="201">Usuario creado exitosamente.</response>
+        /// <response code="400">Datos inválidos o error al crear el usuario.</response>
+        /// <remarks>
+        /// Este endpoint solo permite acceso a usuarios no autenticados (política "AnonymousOnly").
+        /// No requiere token JWT.
+        /// </remarks>
         [HttpPost]
         [Authorize(Policy = "AnonymousOnly")]
         public ActionResult Add([FromBody]CreateUserDTO newUserData)
@@ -62,6 +86,17 @@ namespace Web.Controllers
            
         }
 
+
+        /// <summary>
+        /// Elimina un usuario por su ID.
+        /// </summary>
+        /// <param name="id">El ID del usuario a eliminar.</param>
+        /// <returns>No content si se elimina correctamente.</returns>
+        /// <response code="204">Usuario eliminado exitosamente.</response>
+        /// <response code="400">Error al eliminar el usuario.</response>
+        /// <remarks>
+        /// Este endpoint requiere autenticación JWT.
+        /// </remarks>
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {

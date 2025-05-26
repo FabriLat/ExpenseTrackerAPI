@@ -6,17 +6,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Domain.Entities;
 
-[Table("groups")]
+[Table("teams")]
 [Index("OwnerId", Name = "owner_id_idx")]
-public partial class Group
+public partial class Team
 {
     [Key]
-    [Column("id_group")]
-    public int IdGroup { get; set; }
+    [Column("id_team")]
+    public int IdTeam { get; set; }
 
-    [Column("group_name")]
+    [Column("team_name")]
     [StringLength(45)]
-    public string GroupName { get; set; } = null!;
+    public string TeamName { get; set; } = null!;
 
     [Column("created_date")]
     public DateOnly CreatedDate { get; set; }
@@ -24,17 +24,17 @@ public partial class Group
     [Column("owner_id")]
     public int OwnerId { get; set; }
 
-    [InverseProperty("Group")]
+    [InverseProperty("Team")]
     public virtual ICollection<Expense> Expenses { get; set; } = new List<Expense>();
 
-    [InverseProperty("Group")]
+    [InverseProperty("Team")]
     public virtual ICollection<Invitation> Invitations { get; set; } = new List<Invitation>();
 
     [ForeignKey("OwnerId")]
-    [InverseProperty("Groups")]
+    [InverseProperty("Teams")]
     public virtual User Owner { get; set; } = null!;
 
-    [ForeignKey("GroupId")]
-    [InverseProperty("GroupsNavigation")]
+    [ForeignKey("TeamId")]
+    [InverseProperty("TeamsNavigation")]
     public virtual ICollection<User> Users { get; set; } = new List<User>();
 }

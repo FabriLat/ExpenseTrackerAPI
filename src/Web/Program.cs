@@ -19,13 +19,22 @@ builder.Services.AddControllers();
 
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "SplitEasy API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "SplitEasy API",
+        Version = "v1",
+        Description = "API SplitEasy"
+    });
+
+    // Configuración para autenticación JWT
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Type = SecuritySchemeType.Http,
-        Scheme = "Bearer",
-        Description = "Pega el token JWT generado.",
-        BearerFormat = "JWT"
+        Scheme = "bearer", // Esquema en minúsculas
+        Description = "Pega el token JWT generado en el formato: Bearer {token}",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Name = "Authorization"
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -41,6 +50,19 @@ builder.Services.AddSwaggerGen(c =>
             new List<string>()
         }
     });
+
+    // Incluir comentarios XML
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
+
+    // Si los DTOs están en otro proyecto (por ejemplo, Application)
+    var appXmlFile = "Application.xml"; // Ajusta según el nombre del proyecto
+    var appXmlPath = Path.Combine(AppContext.BaseDirectory, appXmlFile);
+    if (File.Exists(appXmlPath))
+    {
+        c.IncludeXmlComments(appXmlPath);
+    }
 });
 
 
@@ -77,6 +99,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
+builder.Services.AddScoped<ITeamService, TeamService>();
 
 
 //REPOSITORIOS
@@ -84,6 +107,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.Configure<AuthenticationServiceOptions>(
     builder.Configuration.GetSection("AuthenticationService"));
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
+builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

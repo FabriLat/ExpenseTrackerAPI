@@ -34,13 +34,13 @@ namespace Application.services
             newExpense.ExpenseName = expense.ExpenseName;
             newExpense.Description = expense.Description;
 
-            if(expense.GroupId == 0 || expense.GroupId == null)
+            if(expense.TeamId == 0 || expense.TeamId == null)
             {
-                newExpense.GroupId = null;
+                newExpense.TeamId = null;
             }
             else
             {
-                newExpense.GroupId = expense.GroupId;
+                newExpense.TeamId = expense.TeamId;
             }
             newExpense.ExpenseDate = DateOnly.FromDateTime(DateTime.Today);
             _expenseRepository.Add(newExpense);
@@ -81,5 +81,22 @@ namespace Application.services
             }
             return [];
         }
+
+        public bool DeleteExpense(int expenseId, int userId)
+        {
+            var expense = _expenseRepository.GetById(expenseId);
+            if (expense != null)
+            {
+                if (expense.UserId == userId)
+                {
+                    _expenseRepository.Delete(expense);
+                    return true;
+                }
+            }
+            return false;
+        }
+
     }
+
+
 }

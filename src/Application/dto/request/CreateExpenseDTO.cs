@@ -22,6 +22,6 @@ namespace Application.dto.request
         [StringLength(155)]
         public string? Description { get; set; }
 
-        public int? GroupId { get; set; }
+        public int? TeamId { get; set; }
     }
 }
