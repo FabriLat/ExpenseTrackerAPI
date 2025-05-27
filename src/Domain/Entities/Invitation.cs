@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -25,6 +26,9 @@ public partial class Invitation
 
     [Column("team_id")]
     public int TeamId { get; set; }
+
+    [Column("state")]
+    public InvitationState State { get; set; } = InvitationState.Pending;
 
     [ForeignKey("TeamId")]
     [InverseProperty("Invitations")]

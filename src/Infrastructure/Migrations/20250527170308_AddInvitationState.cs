@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class RenameGroupsToTeams : Migration
+    public partial class AddInvitationState : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -103,7 +103,8 @@ namespace Infrastructure.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     owner_user_id = table.Column<int>(type: "int", nullable: false),
                     invited_user_id = table.Column<int>(type: "int", nullable: false),
-                    team_id = table.Column<int>(type: "int", nullable: false)
+                    team_id = table.Column<int>(type: "int", nullable: false),
+                    state = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
                 {

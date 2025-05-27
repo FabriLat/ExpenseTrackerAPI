@@ -90,6 +90,12 @@ namespace Infrastructure.Migrations
                         .HasColumnType("int")
                         .HasColumnName("owner_user_id");
 
+                    b.Property<int>("State")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0)
+                        .HasColumnName("state");
+
                     b.Property<int>("TeamId")
                         .HasColumnType("int")
                         .HasColumnName("team_id");

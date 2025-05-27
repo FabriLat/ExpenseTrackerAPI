@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure;
@@ -49,6 +50,8 @@ public partial class GestionGastosContext : DbContext
         modelBuilder.Entity<Invitation>(entity =>
         {
             entity.HasKey(e => e.IdInvitation).HasName("PRIMARY");
+
+            entity.Property(e => e.State).HasColumnName("state").HasDefaultValue(InvitationState.Pending);
 
             entity.HasOne(d => d.Team).WithMany(p => p.Invitations)
                 .OnDelete(DeleteBehavior.ClientSetNull)

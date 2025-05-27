@@ -41,7 +41,8 @@ namespace Web.Controllers
         [HttpGet("{id}")]
         public ActionResult<TeamDTO?> Get(int id)
         {
-            return Ok(_teamService.GetById(id));
+            TeamDTO? dto = _teamService.GetById(id);
+            return dto;
         }
 
 

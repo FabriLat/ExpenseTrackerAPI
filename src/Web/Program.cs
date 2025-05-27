@@ -100,6 +100,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<ITeamService, TeamService>();
+builder.Services.AddScoped<IInvitationService, InvitationService>();
 
 
 //REPOSITORIOS
@@ -108,6 +109,7 @@ builder.Services.Configure<AuthenticationServiceOptions>(
     builder.Configuration.GetSection("AuthenticationService"));
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
+builder.Services.AddScoped<IInvitationRepository, InvitationRepository>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

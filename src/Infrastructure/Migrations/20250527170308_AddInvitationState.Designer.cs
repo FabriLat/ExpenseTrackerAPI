@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(GestionGastosContext))]
-    [Migration("20250526135156_RenameGroupsToTeams")]
-    partial class RenameGroupsToTeams
+    [Migration("20250527170308_AddInvitationState")]
+    partial class AddInvitationState
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,6 +92,12 @@ namespace Infrastructure.Migrations
                     b.Property<int>("OwnerUserId")
                         .HasColumnType("int")
                         .HasColumnName("owner_user_id");
+
+                    b.Property<int>("State")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0)
+                        .HasColumnName("state");
 
                     b.Property<int>("TeamId")
                         .HasColumnType("int")
