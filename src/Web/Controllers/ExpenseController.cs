@@ -42,17 +42,19 @@ namespace Web.Controllers
             try
             {
                 int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
-                _expenseService.AddExpense(newExpense, userId);
-                return Ok();
+                
+                bool created = _expenseService.AddExpense(newExpense, userId);
+                if (created == true)
+                {
+                    return Ok();
+                }
+                return StatusCode(400);
             } catch (InvalidAmountException e)
             {
                 return BadRequest(e.Message);
             }
 
         }
-
-
-
 
 
         /// <summary>

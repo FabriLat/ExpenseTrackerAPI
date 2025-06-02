@@ -80,6 +80,12 @@ namespace Application.services
             return null;
         }
 
+        public User? GetByIdCompleteData(int id)
+        {
+            User? user = _userRepository.GetById(id);
+            return user;
+        }
+
         public bool Delete(int id)
         {
             var user = _userRepository.GetById(id);

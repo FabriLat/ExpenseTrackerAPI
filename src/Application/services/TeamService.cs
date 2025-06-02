@@ -25,12 +25,19 @@ namespace Application.services
 
         public TeamDTO? CreateTeam(CreateTeamDTO createTeamDto, int creatorId)
         {
-            if(createTeamDto.TeamName.Trim().Length > 0 && creatorId > 0)
+            var ownerUser = _userService.GetByIdCompleteData(creatorId);
+            if (ownerUser == null)
+                return null;
+            if (createTeamDto.TeamName.Trim().Length > 0 && creatorId > 0)
             {
                 Team newTeam = new Team();
                 newTeam.TeamName = createTeamDto.TeamName.Trim();
                 newTeam.CreatedDate = DateOnly.FromDateTime(DateTime.Today);
                 newTeam.OwnerId = creatorId;
+
+                
+                newTeam.Users.Add(ownerUser);
+
                 _teamRepository.Add(newTeam);
                 return TeamDTO.Create(newTeam);
             }

@@ -16,10 +16,14 @@ namespace Application.services
     {
 
         private readonly IExpenseRepository _expenseRepository;
+        private readonly IUserService _userService;
+        private readonly ITeamRepository _teamRepository;
 
-        public ExpenseService(IExpenseRepository expenseRepository)
+        public ExpenseService(IExpenseRepository expenseRepository, IUserService userService, ITeamRepository teamRepository)
         {
             _expenseRepository = expenseRepository;
+            _userService = userService;
+            _teamRepository = teamRepository;
         }
 
         public bool AddExpense(CreateExpenseDTO expense, int userId)
@@ -34,13 +38,27 @@ namespace Application.services
             newExpense.ExpenseName = expense.ExpenseName;
             newExpense.Description = expense.Description;
 
-            if(expense.TeamId == 0 || expense.TeamId == null)
+            if (expense.TeamId <= 0)
             {
                 newExpense.TeamId = null;
             }
-            else
+            else if (expense.TeamId > 0)
             {
-                newExpense.TeamId = expense.TeamId;
+                
+                User? user = _userService.GetByIdCompleteData(userId);
+                Team? team = _teamRepository.GetTeamAndUsers(expense.TeamId);
+                if (user == null || team == null)
+                    { return false; }
+
+                if (team.Users.Contains(user))
+                {
+                    newExpense.TeamId = expense.TeamId;
+                }
+                else
+                {
+                    return false;
+                    //Aca puede llegar a ir una excepcion
+                }
             }
             newExpense.ExpenseDate = DateOnly.FromDateTime(DateTime.Today);
             _expenseRepository.Add(newExpense);

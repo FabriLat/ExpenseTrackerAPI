@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Entities;
 
 namespace Application.interfaces
 {
@@ -12,6 +13,8 @@ namespace Application.interfaces
 
         bool AcceptInvite(int userId, int invitationId);
 
-        bool DeclineInvitation(int userId, int invitationId);
+        bool RejectInvitation(int userId, int invitationId);
+
+        List<Invitation> GetByUserId(int userId);
     }
 }

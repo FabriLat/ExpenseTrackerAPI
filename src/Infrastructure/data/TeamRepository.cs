@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.data
 {
@@ -17,6 +18,11 @@ namespace Infrastructure.data
             _context = context;
         }
 
+        public Team? GetTeamAndUsers(int teamId)
+        {
+            Team? team = _context.Teams.Include( t => t.Users ).FirstOrDefault(t => t.IdTeam==teamId);
+            return team;
+        }
         public Team? GetByName(string teamName)
         {
             throw new NotImplementedException();

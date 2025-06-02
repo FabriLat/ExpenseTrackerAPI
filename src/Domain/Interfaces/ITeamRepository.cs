@@ -13,5 +13,7 @@ namespace Domain.Interfaces
 
         Team? GetByOwnerId(int ownerId);
 
+        Team? GetTeamAndUsers(int teamId);
+
     }
 }

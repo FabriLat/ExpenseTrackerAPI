@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.dto.response;
 using Application.interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Interfaces;
 
 namespace Application.services
@@ -13,29 +15,37 @@ namespace Application.services
     {
 
         private readonly IInvitationRepository _invitationRepository;
-        private readonly ITeamService _teamService;
+        private readonly ITeamRepository _teamRepository;
+        private readonly IUserRepository _userRepository;
 
-        public InvitationService(IInvitationRepository invitationRepository, ITeamService teamService)
+        public InvitationService(IInvitationRepository invitationRepository, ITeamRepository teamRepository, IUserRepository userRepository)
         {
             _invitationRepository = invitationRepository;
-            _teamService = teamService;
+            _teamRepository = teamRepository;
+            _userRepository = userRepository;
         }
 
-        public bool AcceptInvite(int userId, int invitationId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool DeclineInvitation(int userId, int invitationId)
-        {
-            throw new NotImplementedException();
-        }
 
         public bool InviteUser(int invitatedId, int ownerId, int teamId)
         {
-            var team = _teamService.GetById(teamId);
+            Team? team = _teamRepository.GetById(teamId);
+            if (team == null)
+            { return false; }
 
-            if(team.ownerId == ownerId && invitatedId != ownerId)
+            User? user = _userRepository.GetById(invitatedId);
+            if(user == null)
+            { return false; }
+
+
+            List<Invitation> userInvitations = _invitationRepository.GetByUserId(invitatedId);
+            int alreadyInvited = userInvitations.Where(u => u.TeamId == teamId && u.State == InvitationState.Pending).Count();
+
+            if (alreadyInvited > 0)
+            {
+                return false;
+            }
+
+            if(team.OwnerId == ownerId && invitatedId != ownerId)
             {
                 Invitation newInvitation = new Invitation();
                 newInvitation.InvitedUserId = invitatedId;
@@ -45,6 +55,54 @@ namespace Application.services
                 return true;
             }
             return false;
+        }
+
+
+        public List<Invitation> GetByUserId(int userId)
+        {
+            var invitations = _invitationRepository.GetByUserId(userId);
+            List<Invitation> pendingInvitations = invitations.Where(i => i.State == InvitationState.Pending).ToList();
+            return pendingInvitations;
+        }
+
+
+        public bool AcceptInvite(int userId, int invitationId)
+        {
+            Invitation? invitation = _invitationRepository.GetByIdWithTeamAndInvitedUser(invitationId);
+            if (invitation == null)
+                return false;
+
+            User user = invitation.InvitedUser;
+
+            if (invitation != null && user != null)
+            {
+                var team = invitation.Team;
+                if (invitation.InvitedUserId == userId && invitation.State == InvitationState.Pending)
+                {
+                    invitation.State = InvitationState.Accepted;
+                    invitation.Team.Users.Add(user);
+                    _invitationRepository.Update(invitation);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
+
+
+        public bool RejectInvitation(int userId, int invitationId)
+        {
+            Invitation? invitation = _invitationRepository.GetById(invitationId);
+            
+            if( invitation != null && invitation.InvitedUserId == userId)
+            {
+                invitation.State = InvitationState.Rejected;
+                _invitationRepository.Update(invitation);
+                return true;
+            }
+            return false;
+
         }
     }
 }

@@ -9,5 +9,11 @@ namespace Domain.Interfaces
 {
     public interface IInvitationRepository : IBaseRepository<Invitation>
     {
+        Invitation? GetByIdWithTeamAndInvitedUser(int invitationId);
+
+        List<Invitation> GetByUserId(int userId);
+
+
+
     }
 }
