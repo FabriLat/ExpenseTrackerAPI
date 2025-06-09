@@ -31,5 +31,12 @@ namespace Infrastructure.data
         }
 
 
+        public List<Expense> GetUserExpensesForTeam(int userId, int teamId)
+        {
+            List<Expense> expenses = _context.Expenses.Where(e => e.UserId == userId && e.TeamId == teamId).ToList();
+            return expenses;
+        }
+
+
     }
 }

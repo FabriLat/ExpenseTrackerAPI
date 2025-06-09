@@ -100,6 +100,23 @@ namespace Application.services
             return [];
         }
 
+
+        public List<ExpenseDTO> GetUserExpensesForTeam(int userId, int teamId)
+        {
+            List<Expense> expenses = _expenseRepository.GetUserExpensesForTeam(userId, teamId);
+            if(expenses.Count() > 0)
+            {
+                List<ExpenseDTO> expensesDto = new List<ExpenseDTO>();
+                foreach (var e in expenses)
+                {
+                    var dto = ExpenseDTO.Create(e);
+                    expensesDto.Add(dto);
+                }
+                return expensesDto;
+            }
+            return [];
+        }
+
         public bool DeleteExpense(int expenseId, int userId)
         {
             var expense = _expenseRepository.GetById(expenseId);

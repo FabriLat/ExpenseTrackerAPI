@@ -1,4 +1,6 @@
-﻿using Application.dto.response;
+﻿using System.Security.Claims;
+using Application.dto.request;
+using Application.dto.response;
 using Application.interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -76,15 +78,40 @@ namespace Web.Controllers
                 {
                     return CreatedAtAction("Get", "User", new { id = created.Id }, created);
                 }
-
                 return BadRequest(new { Message = "No se pudo crear el cliente" });
-
             }catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
            
         }
+
+
+
+        /// <summary>
+        /// Actualiza los datos de un usuario.
+        /// </summary>
+        /// <param name="newUserData">Datos actualizados del usuario.</param>
+        /// <returns>Respuesta con los datos actualizados del usuario si la operación es exitosa.</returns>
+        /// <response code="200">Usuario actualizado exitosamente.</response>
+        /// <response code="400">Datos inválidos o no se pudo actualizar el usuario.</response>
+        /// <response code="401">No autorizado: se requiere un token JWT válido.</response>
+        /// <remarks>
+        /// Este endpoint requiere autenticación JWT. Solo el usuario autenticado puede actualizar sus propios datos.
+        /// </remarks>
+        [HttpPut]
+        [Authorize]
+        public ActionResult Update(UpdateUserDTO newUserData)
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            var userData = _userService.UpdateUser(userId, newUserData);
+
+            if (userData != null)
+                return Ok(userData);
+            return BadRequest();
+
+        }
+
 
 
         /// <summary>

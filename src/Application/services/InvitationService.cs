@@ -77,7 +77,7 @@ namespace Application.services
             if (invitation != null && user != null)
             {
                 var team = invitation.Team;
-                if (invitation.InvitedUserId == userId && invitation.State == InvitationState.Pending)
+                if (invitation.InvitedUserId == userId && invitation.State == InvitationState.Pending && team.Users.Count() < 5)
                 {
                     invitation.State = InvitationState.Accepted;
                     invitation.Team.Users.Add(user);

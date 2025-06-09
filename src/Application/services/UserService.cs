@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.dto.request;
 using Application.dto.response;
 using Application.interfaces;
 using Domain.Entities;
@@ -40,7 +41,6 @@ namespace Application.services
                 throw new DuplicateUserDataException("número de teléfono");
             }
 
-
             User newUser = new User();
             newUser.Name = newUserData.Name;
             newUser.LastName = newUserData.LastName;
@@ -50,6 +50,31 @@ namespace Application.services
             _userRepository.Add(newUser);
             return UserDTO.Create(newUser);
         }
+
+        public UserDTO? UpdateUser(int userId, UpdateUserDTO newUserData)
+        {
+            var IsEmailInUse = _userRepository.GetByEmail(newUserData.Email);
+            var IsPhoneNumberInUse = _userRepository.GetByPhoneNumber(newUserData.PhoneNumber);
+
+
+            if (IsEmailInUse != null || IsPhoneNumberInUse != null)
+                return null;
+
+
+            User? userToUpdate = _userRepository.GetById(userId);
+            if (userToUpdate != null)
+            {
+                userToUpdate.Name = newUserData.Name;
+                userToUpdate.LastName = newUserData.LastName;
+                userToUpdate.Email = newUserData.Email;
+                userToUpdate.PhoneNumber = newUserData.PhoneNumber;
+                _userRepository.Update(userToUpdate);
+                UserDTO userUpdated = UserDTO.Create(userToUpdate);
+                return userUpdated;
+            }
+            return null;
+        }
+
 
         public List<UserDTO>? GetAll()
         {

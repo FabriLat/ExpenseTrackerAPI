@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.dto.request;
 using Application.dto.response;
 using Domain.Entities;
 
@@ -17,6 +18,8 @@ namespace Application.interfaces
         User? GetByIdCompleteData(int id);
 
         List<UserDTO>? GetAll();
+
+        UserDTO? UpdateUser(int userId, UpdateUserDTO newUserData);
 
         bool Delete(int id);
     }

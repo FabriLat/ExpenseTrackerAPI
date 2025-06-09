@@ -17,5 +17,7 @@ namespace Application.interfaces
         List<ExpenseDTO> GetByDate(DateOnly date, int userId);
 
         bool DeleteExpense(int expenseId, int userId);
+
+        List<ExpenseDTO> GetUserExpensesForTeam(int userId, int teamId);
     }
 }

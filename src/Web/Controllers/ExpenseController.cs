@@ -78,7 +78,6 @@ namespace Web.Controllers
                 return Ok(userExpenses);
             } catch (Exception e)
             { return BadRequest(e.Message); }
-
         }
 
 
@@ -134,6 +133,30 @@ namespace Web.Controllers
             return BadRequest();
 
         }
+
+
+
+        /// <summary>
+        /// Obtiene todos los gastos realizados por un usuario en un equipo específico.
+        /// </summary>
+        /// <param name="teamId">El ID del equipo del cual se desean consultar los gastos.</param>
+        /// <returns>Lista de gastos realizados por el usuario en el equipo.</returns>
+        /// <response code="200">Gastos obtenidos exitosamente.</response>
+        /// <response code="401">No autorizado: se requiere un token JWT válido.</response>
+        /// <remarks>
+        /// Este endpoint requiere autenticación JWT. Solo el usuario autenticado puede consultar sus propios gastos en el equipo especificado.
+        /// </remarks>
+        [HttpGet("{teamId}")]
+        [Authorize]
+        public ActionResult<List<ExpenseDTO>> GetTeamUserExpeses(int teamId)
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            List<ExpenseDTO> expenses = _expenseService.GetUserExpensesForTeam(userId, teamId);
+            return Ok(expenses);
+        }
+        
+
+
 
     }
 
