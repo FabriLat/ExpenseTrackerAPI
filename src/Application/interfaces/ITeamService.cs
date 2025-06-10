@@ -17,5 +17,7 @@ namespace Application.interfaces
         TeamDTO? GetById(int id);
 
         bool UpdateTeam(int id, int userId ,UpdateTeamDTO team);
+
+        bool LeaveTeam(int userId, LeaveTeamDTO leaveTeamDTO);
     }
 }

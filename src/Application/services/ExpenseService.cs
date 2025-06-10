@@ -57,13 +57,41 @@ namespace Application.services
                 else
                 {
                     return false;
-                    //Aca puede llegar a ir una excepcion
+                    //aca puede llegar a ir una excepcion
                 }
             }
             newExpense.ExpenseDate = DateOnly.FromDateTime(DateTime.Today);
             _expenseRepository.Add(newExpense);
             return true;
         }
+
+
+
+        public List<ExpenseDTO>? GetByTeamId(int userId, int teamId)
+        {
+            List<Expense> expensesFullData = _expenseRepository.GetByTeamId(teamId);
+            User? user = _userService.GetByIdCompleteData(userId);
+
+            if (user != null)
+            {
+                Team? team = _teamRepository.GetTeamAndUsers(teamId);
+
+                if (team != null && team.Users.Contains(user))
+                {
+                    List<ExpenseDTO> dtos = new List<ExpenseDTO>();
+                    foreach (var expense in expensesFullData)
+                    {
+                        ExpenseDTO dto = ExpenseDTO.Create(expense);
+                        dtos.Add(dto);
+                    }
+                    return dtos;
+                }
+                return null;
+            }  
+            return null;
+        }
+
+
 
         public List<ExpenseDTO> GetExpenses(int userId)
         {
@@ -101,10 +129,16 @@ namespace Application.services
         }
 
 
-        public List<ExpenseDTO> GetUserExpensesForTeam(int userId, int teamId)
+        public List<ExpenseDTO>? GetUserExpensesForTeam(int userId, int teamId)
         {
             List<Expense> expenses = _expenseRepository.GetUserExpensesForTeam(userId, teamId);
-            if(expenses.Count() > 0)
+            User? user = _userService.GetByIdCompleteData(userId);
+            Team? team = _teamRepository.GetTeamAndUsers(teamId);
+
+            if (team == null || user == null || !team.Users.Contains(user))
+                return null;
+
+            if (expenses.Count() > 0)
             {
                 List<ExpenseDTO> expensesDto = new List<ExpenseDTO>();
                 foreach (var e in expenses)

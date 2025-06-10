@@ -35,7 +35,6 @@ namespace Application.services
                 newTeam.CreatedDate = DateOnly.FromDateTime(DateTime.Today);
                 newTeam.OwnerId = creatorId;
 
-                
                 newTeam.Users.Add(ownerUser);
 
                 _teamRepository.Add(newTeam);
@@ -72,13 +71,48 @@ namespace Application.services
             return false;
         }
 
+
+        public bool LeaveTeam(int userId, LeaveTeamDTO leaveTeamDTO)
+        {
+            int teamId = leaveTeamDTO.TeamId;
+            Team? team = _teamRepository.GetTeamAndUsers(teamId);
+
+            if(team != null)
+            {
+                var userInTeam = team.Users.FirstOrDefault(u => u.IdUser == userId);
+
+                if(userInTeam != null)
+                {
+                    if(userInTeam.IdUser == team.OwnerId)
+                    {
+                        if (!leaveTeamDTO.NewOwnerId.HasValue)
+                            return false;
+
+                        var newOwnerInGroup = team.Users.FirstOrDefault(u => u.IdUser == leaveTeamDTO.NewOwnerId);
+
+                        if(newOwnerInGroup != null)
+                        {
+
+                            team.OwnerId = leaveTeamDTO.NewOwnerId.Value;
+                        }
+                        else { return false; }
+                    }
+                        
+                    team.Users.Remove(userInTeam);
+                    _teamRepository.Update(team);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
         public bool DeleteTeam(int teamId, int userId)
         {
             Team? teamToDelete = _teamRepository.GetById(teamId);
 
             if (teamToDelete != null)
             {
-                Console.WriteLine("asdasdas");
                 if(teamToDelete.OwnerId == userId)
                 {
                     _teamRepository.Delete(teamToDelete);

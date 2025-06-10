@@ -21,15 +21,15 @@ namespace Web.Controllers
 
 
         /// <summary>
-        /// Crea un nuevo equipo.
+        /// Crea un nuevo grupo.
         /// </summary>
-        /// <param name="createTeamDto">Datos del nuevo equipo.</param>
-        /// <returns>Respuesta con el equipo creado.</returns>
+        /// <param name="createTeamDto">Datos del nuevo grupo.</param>
+        /// <returns>Respuesta con el grupo creado.</returns>
         /// <response code="201">Equipo creado exitosamente.</response>
-        /// <response code="400">Datos inválidos para la creación del equipo.</response>
+        /// <response code="400">Datos inválidos para la creación del grupo.</response>
         /// <response code="401">No autorizado: se requiere un token JWT válido.</response>
         /// <remarks>
-        /// Este endpoint requiere autenticación JWT. El usuario autenticado será considerado el creador del equipo.
+        /// Este endpoint requiere autenticación JWT. El usuario autenticado será considerado el creador del grupo.
         /// </remarks>
         [HttpPost]
         [Authorize]
@@ -51,14 +51,14 @@ namespace Web.Controllers
 
 
         /// <summary>
-        /// Obtiene un equipo por su ID.
+        /// Obtiene un grupo por su ID.
         /// </summary>
-        /// <param name="id">ID del equipo a consultar.</param>
-        /// <returns>Detalles del equipo solicitado.</returns>
+        /// <param name="id">ID del grupo a consultar.</param>
+        /// <returns>Detalles del grupo solicitado.</returns>
         /// <response code="200">Equipo encontrado y devuelto exitosamente.</response>
         /// <response code="404">Equipo no encontrado.</response>
         /// <remarks>
-        /// No requiere autenticación para consultar el equipo.
+        /// No requiere autenticación para consultar el grupo.
         /// </remarks>
         [HttpGet("{id}")]
         public ActionResult<TeamDTO?> Get(int id)
@@ -70,17 +70,17 @@ namespace Web.Controllers
 
 
         /// <summary>
-        /// Actualiza un equipo existente.
+        /// Actualiza un grupo existente.
         /// </summary>
-        /// <param name="id">ID del equipo a actualizar.</param>
-        /// <param name="dto">Datos actualizados del equipo.</param>
-        /// <returns>Respuesta exitosa si el equipo se actualiza correctamente.</returns>
+        /// <param name="id">ID del grupo a actualizar.</param>
+        /// <param name="dto">Datos actualizados del grupo.</param>
+        /// <returns>Respuesta exitosa si el grupo se actualiza correctamente.</returns>
         /// <response code="200">Equipo actualizado exitosamente.</response>
         /// <response code="400">Datos inválidos para la actualización.</response>
         /// <response code="401">No autorizado: se requiere un token JWT válido.</response>
-        /// <response code="403">Prohibido: el usuario no tiene permiso para actualizar el equipo.</response>
+        /// <response code="403">Prohibido: el usuario no tiene permiso para actualizar el grupo.</response>
         /// <remarks>
-        /// Este endpoint requiere autenticación JWT. Solo el propietario del equipo puede actualizarlo.
+        /// Este endpoint requiere autenticación JWT. Solo el propietario del grupo puede actualizarlo.
         /// </remarks>
         [HttpPut("{id}")]
         [Authorize]
@@ -91,7 +91,7 @@ namespace Web.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (_teamService.UpdateTeam(id,userId, dto) == true)
+            if (_teamService.UpdateTeam(id,userId, dto))
             {
                 return Ok();
             }
@@ -101,15 +101,40 @@ namespace Web.Controllers
 
 
         /// <summary>
-        /// Elimina un equipo existente.
+        /// Permite a un usuario salir de un grupo.
         /// </summary>
-        /// <param name="id">ID del equipo a eliminar.</param>
-        /// <returns>Respuesta sin contenido si el equipo se elimina correctamente.</returns>
+        /// <param name="leaveTeamDTO">Datos necesarios para salir del grupo, incluyendo el ID del grupo y, si es el propietario, el ID del nuevo propietario.</param>
+        /// <returns>Respuesta exitosa si el usuario sale del grupo correctamente.</returns>
+        /// <response code="200">Usuario salió del grupo exitosamente.</response>
+        /// <response code="400">Datos inválidos, el usuario no está en el grupo o no se especificó un nuevo propietario válido.</response>
+        /// <response code="401">No autorizado: se requiere un token JWT válido.</response>
+        /// <remarks>
+        /// Este endpoint requiere autenticación JWT. Si el usuario es el propietario del grupo, debe especificar un nuevo propietario en el DTO.
+        /// </remarks>
+        [HttpPut("[action]")]
+        [Authorize]
+        public ActionResult Leave(LeaveTeamDTO leaveTeamDTO)
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            if(_teamService.LeaveTeam(userId, leaveTeamDTO))
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
+
+
+
+        /// <summary>
+        /// Elimina un grupo existente.
+        /// </summary>
+        /// <param name="id">ID del grupo a eliminar.</param>
+        /// <returns>Respuesta sin contenido si el grupo se elimina correctamente.</returns>
         /// <response code="204">Equipo eliminado exitosamente.</response>
         /// <response code="401">No autorizado: se requiere un token JWT válido.</response>
-        /// <response code="403">Prohibido: el usuario no tiene permiso para eliminar el equipo.</response>
+        /// <response code="403">Prohibido: el usuario no tiene permiso para eliminar el grupo.</response>
         /// <remarks>
-        /// Este endpoint requiere autenticación JWT. Solo el propietario del equipo puede eliminarlo.
+        /// Este endpoint requiere autenticación JWT. Solo el propietario del grupo puede eliminarlo.
         /// </remarks>
         [HttpDelete("{id}")]
         [Authorize]
@@ -117,7 +142,7 @@ namespace Web.Controllers
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
             bool deleted = _teamService.DeleteTeam(id, userId);
-            if (deleted == true)
+            if (deleted)
             {
                 return NoContent();
             }

@@ -42,7 +42,6 @@ namespace Infrastructure.Services
         {
             
             var user = ValidateUser(authenticationRequest) ?? throw new Exception("not found");
-            Console.WriteLine("User validado: " + user.Name);
 
             //Se secreto se guarda en una variable
             var securityPassword = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_options.SecretForKey));
@@ -70,8 +69,6 @@ namespace Infrastructure.Services
                 .WriteToken(jwtSecurityToken);
 
             //se retorna el jwt como string
-            Console.WriteLine("seguimos bien con: ");
-            Console.WriteLine(tokenToReturn.ToString());
             return tokenToReturn.ToString();
         }
 

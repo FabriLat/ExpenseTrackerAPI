@@ -85,7 +85,6 @@ namespace Application.services
             {
                 foreach (var u in users)
                 {
-                    Console.WriteLine(u.Name);
                     UserDTO dto = UserDTO.Create(u);
                     userDTOs.Add(dto);
                 }
