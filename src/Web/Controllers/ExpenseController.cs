@@ -52,6 +52,9 @@ namespace Web.Controllers
             } catch (InvalidAmountException e)
             {
                 return BadRequest(e.Message);
+            }catch (UserNotInTeamException e)
+            {
+                return BadRequest(e.Message);
             }
 
         }

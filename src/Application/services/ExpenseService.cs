@@ -56,8 +56,7 @@ namespace Application.services
                 }
                 else
                 {
-                    return false;
-                    //aca puede llegar a ir una excepcion
+                    throw new UserNotInTeamException();
                 }
             }
             newExpense.ExpenseDate = DateOnly.FromDateTime(DateTime.Today);
@@ -86,7 +85,7 @@ namespace Application.services
                     }
                     return dtos;
                 }
-                return null;
+                throw new UserNotInTeamException();
             }  
             return null;
         }
