@@ -146,7 +146,7 @@ namespace Web.Controllers
          /// <remarks>
         /// Este endpoint requiere autenticación JWT.
         /// </remarks>
-        [HttpDelete]
+        [HttpDelete("{expenseId}")]
         [Authorize]
         public ActionResult Delete(int expenseId)
         {

@@ -19,5 +19,7 @@ namespace Application.interfaces
         bool UpdateTeam(int id, int userId ,UpdateTeamDTO team);
 
         bool LeaveTeam(int userId, LeaveTeamDTO leaveTeamDTO);
+
+        bool RemoveUser(int userId, int teamId, int ownerId);
     }
 }

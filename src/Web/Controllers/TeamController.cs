@@ -149,5 +149,31 @@ namespace Web.Controllers
             return Forbid();
         }
 
+
+        /// <summary>
+        /// Elimina a un usuario de un equipo.
+        /// </summary>
+        /// <param name="teamId">El ID del equipo del cual se eliminará al usuario.</param>
+        /// <param name="userId">El ID del usuario a eliminar del equipo.</param>
+        /// <returns>Respuesta exitosa si el usuario es eliminado del equipo correctamente.</returns>
+        /// <response code="200">Usuario eliminado del equipo exitosamente.</response>
+        /// <response code="400">No se pudo eliminar al usuario, el equipo no existe o el usuario no está en el equipo.</response>
+        /// <response code="401">No autorizado: se requiere un token JWT válido.</response>
+        /// <response code="403">Prohibido: solo el propietario del equipo puede eliminar usuarios.</response>
+        /// <remarks>
+        /// Este endpoint requiere autenticación JWT. Solo el propietario del equipo puede eliminar a un usuario del equipo.
+        /// </remarks>
+        [HttpPut("RemoveUser/{userId}")]
+        [Authorize]
+        public ActionResult RemoveUser(int teamId, int userId)
+        {
+            int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            bool removed = _teamService.RemoveUser(userId, teamId, ownerId);
+            if(removed)
+            {
+                return Ok();
+            }
+            return BadRequest();
+        }
     }
 }

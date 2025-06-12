@@ -97,7 +97,7 @@ namespace Application.services
                         }
                         else { return false; }
                     }
-                        
+                    
                     team.Users.Remove(userInTeam);
                     _teamRepository.Update(team);
                     return true;
@@ -118,6 +118,25 @@ namespace Application.services
                     _teamRepository.Delete(teamToDelete);
                     return true;
                 }
+            }
+            return false;
+        }
+
+
+        public bool RemoveUser(int userId, int teamId, int ownerId)
+        {
+            Team? team = _teamRepository.GetTeamAndUsers(teamId);
+            User? userToRemove = _userService.GetByIdCompleteData(userId);
+            if (team != null && userToRemove != null && team.OwnerId == ownerId)
+            {
+               
+               if (team.Users.Contains(userToRemove))
+               {
+                    team.Users.Remove(userToRemove);
+                    _teamRepository.Update(team);
+                    return true;
+               }
+
             }
             return false;
         }
