@@ -17,5 +17,11 @@ namespace Domain.Interfaces
         List<Expense> GetByDate(DateOnly date, int userId);
 
         List<Expense> GetUserExpensesForTeam(int userId, int teamId);
+
+        public decimal GetTotalExpensesByUserIdAndTeamId(int userId, int teamId);
+
+        public decimal GetTotalExpensesByUserId(int userId);
+
+
     }
 }

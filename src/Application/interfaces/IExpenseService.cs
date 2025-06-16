@@ -21,5 +21,7 @@ namespace Application.interfaces
         bool DeleteExpense(int expenseId, int userId);
 
         List<ExpenseDTO> ?GetUserExpensesForTeam(int userId, int teamId);
+
+       decimal GetTotalExpensesByUser(int userId, int teamId);
     }
 }

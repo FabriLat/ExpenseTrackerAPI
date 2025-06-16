@@ -44,5 +44,21 @@ namespace Infrastructure.data
         }
 
 
+        public decimal GetTotalExpensesByUserId(int userId)
+        {
+            decimal totalExpenses = _context.Expenses.Where(u => u.UserId == userId && u.TeamId == null).Sum(e => e.Amount);
+
+            return totalExpenses;
+        }
+
+        public decimal GetTotalExpensesByUserIdAndTeamId(int userId, int teamId)
+        {
+            decimal totalExpenses = _context.Expenses.Where(u => u.UserId == userId && u.TeamId == teamId).Sum(e => e.Amount);
+
+            return totalExpenses;
+        }
+
+
+
     }
 }

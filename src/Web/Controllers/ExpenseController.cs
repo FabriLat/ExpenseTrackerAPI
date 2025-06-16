@@ -134,8 +134,6 @@ namespace Web.Controllers
             return BadRequest();
         }
 
-
-
         /// <summary>
         /// Elimina un gasto por su ID.
         /// </summary>
@@ -162,7 +160,6 @@ namespace Web.Controllers
         }
 
 
-
         /// <summary>
         /// Obtiene todos los gastos realizados por un usuario en un grupo específico.
         /// </summary>
@@ -185,6 +182,32 @@ namespace Web.Controllers
             }
             return BadRequest();
         }
+
+
+
+
+        /// <summary>
+        /// Obtiene el total de gastos de un usuario, ya sea para un equipo específico o para sus gastos individuales.
+        /// </summary>
+        /// <param name="teamId">El ID del equipo para sumar los gastos del usuario en ese equipo. Si se ingresa 0, se devuelve el total de los gastos propios del usuario que no pertenecen a ningún equipo.</param>
+        /// <returns>Total de gastos del usuario en el equipo especificado o de sus gastos individuales.</returns>
+        /// <response code="200">Total de gastos obtenido exitosamente.</response>
+        /// <response code="401">No autorizado: se requiere un token JWT válido.</response>
+        /// <response code="400">El equipo no existe o el usuario no es miembro del equipo.</response>
+        /// <remarks>
+        /// Este endpoint requiere autenticación JWT. El usuario debe ser miembro del equipo especificado para consultar los gastos del equipo. Si teamId es 0, se devuelven los gastos individuales del usuario que no están asociados a ningún equipo.
+        /// </remarks>
+        [HttpGet("[action]/{teamId}")]
+        [Authorize]
+        public ActionResult<decimal> GetTotalExpensesByUser(int teamId)
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+
+            decimal totalExpenses = _expenseService.GetTotalExpensesByUser(userId, teamId);
+
+            return Ok(totalExpenses);
+        }
+
         
 
 

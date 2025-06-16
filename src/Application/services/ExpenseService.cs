@@ -164,7 +164,22 @@ namespace Application.services
             return false;
         }
 
+
+        public decimal GetTotalExpensesByUser(int userId, int teamId)
+        {
+            if(teamId > 0)
+            {
+                decimal totalExpenseTeam= _expenseRepository.GetTotalExpensesByUserIdAndTeamId(userId, teamId);
+                return totalExpenseTeam;
+            }
+
+            decimal totalExpense = _expenseRepository.GetTotalExpensesByUserId(userId);
+            return totalExpense;
+        }
+
     }
+
+
 
 
 }
