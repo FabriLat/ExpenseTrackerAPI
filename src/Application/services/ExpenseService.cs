@@ -56,7 +56,7 @@ namespace Application.services
                 }
                 else
                 {
-                    throw new UserNotInTeamException();
+                    throw new NotUserInTeamException();
                 }
             }
             newExpense.ExpenseDate = DateOnly.FromDateTime(DateTime.Today);
@@ -85,7 +85,7 @@ namespace Application.services
                     }
                     return dtos;
                 }
-                throw new UserNotInTeamException();
+                throw new NotUserInTeamException();
             }  
             return null;
         }
@@ -165,21 +165,30 @@ namespace Application.services
         }
 
 
-        public decimal GetTotalExpensesByUser(int userId, int teamId)
+        public decimal GetTotalExpensesByUser(int userId, int? teamId)
         {
-            if(teamId > 0)
+            if(teamId != null && teamId > 0)
             {
-                decimal totalExpenseTeam= _expenseRepository.GetTotalExpensesByUserIdAndTeamId(userId, teamId);
-                return totalExpenseTeam;
-            }
 
+                var team = _teamRepository.GetTeamAndUsers(teamId.Value);
+
+                var user = _userService.GetByIdCompleteData(userId);
+
+                if(user != null && team != null)
+                {
+                    if (team.Users.Contains(user))
+                    {
+                        decimal totalExpenseTeam = _expenseRepository.GetTotalExpensesByUserIdAndTeamId(userId, teamId.Value);
+                        return totalExpenseTeam;
+                    }
+                    else
+                    {
+                        throw new NotUserInTeamException();
+                    }
+                } 
+            }
             decimal totalExpense = _expenseRepository.GetTotalExpensesByUserId(userId);
             return totalExpense;
         }
-
     }
-
-
-
-
 }

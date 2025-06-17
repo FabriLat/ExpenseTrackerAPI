@@ -22,6 +22,6 @@ namespace Application.interfaces
 
         List<ExpenseDTO> ?GetUserExpensesForTeam(int userId, int teamId);
 
-       decimal GetTotalExpensesByUser(int userId, int teamId);
+       decimal GetTotalExpensesByUser(int userId, int? teamId);
     }
 }

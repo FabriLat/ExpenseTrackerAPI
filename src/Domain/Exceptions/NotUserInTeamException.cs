@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Exceptions
 {
-    public class UserNotInTeamException : Exception
+    public class NotUserInTeamException : Exception
     {
-        public UserNotInTeamException()
+        public NotUserInTeamException()
             : base($"El usuario no pertenece al grupo seleccionado.")
         {
         }

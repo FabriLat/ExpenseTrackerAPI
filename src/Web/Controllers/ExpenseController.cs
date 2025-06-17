@@ -52,7 +52,7 @@ namespace Web.Controllers
             } catch (InvalidAmountException e)
             {
                 return BadRequest(e.Message);
-            }catch (UserNotInTeamException e)
+            }catch (NotUserInTeamException e)
             {
                 return BadRequest(e.Message);
             }
@@ -189,7 +189,7 @@ namespace Web.Controllers
         /// <summary>
         /// Obtiene el total de gastos de un usuario, ya sea para un equipo específico o para sus gastos individuales.
         /// </summary>
-        /// <param name="teamId">El ID del equipo para sumar los gastos del usuario en ese equipo. Si se ingresa 0, se devuelve el total de los gastos propios del usuario que no pertenecen a ningún equipo.</param>
+        /// <param name="teamId">El ID del equipo para sumar los gastos del usuario en ese equipo. Si se ingresa 0 o un valor nulo, se devuelve el total de los gastos propios del usuario que no pertenecen a ningún equipo.</param>
         /// <returns>Total de gastos del usuario en el equipo especificado o de sus gastos individuales.</returns>
         /// <response code="200">Total de gastos obtenido exitosamente.</response>
         /// <response code="401">No autorizado: se requiere un token JWT válido.</response>
@@ -199,19 +199,21 @@ namespace Web.Controllers
         /// </remarks>
         [HttpGet("[action]/{teamId}")]
         [Authorize]
-        public ActionResult<decimal> GetTotalExpensesByUser(int teamId)
+        public ActionResult<decimal> GetTotalExpensesByUser(int? teamId)
         {
-            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            try
+            {
+                int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
 
-            decimal totalExpenses = _expenseService.GetTotalExpensesByUser(userId, teamId);
+                decimal totalExpenses = _expenseService.GetTotalExpensesByUser(userId, teamId);
 
-            return Ok(totalExpenses);
+                return Ok(totalExpenses);
+            }catch(NotUserInTeamException e)
+            {
+                return BadRequest(e.Message);
+            }
+           
         }
-
-        
-
-
-
     }
 
 }
