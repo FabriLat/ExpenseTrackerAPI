@@ -21,16 +21,16 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "SplitEasy API",
+        Title = "ExpenseTracker API",
         Version = "v1",
-        Description = "API SplitEasy"
+        Description = "API ExpenseTracker"
     });
 
-    // Configuración para autenticación JWT
+
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Type = SecuritySchemeType.Http,
-        Scheme = "bearer", // Esquema en minúsculas
+        Scheme = "bearer", 
         Description = "Pega el token JWT generado en el formato: Bearer {token}",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
@@ -56,8 +56,8 @@ builder.Services.AddSwaggerGen(c =>
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
 
-    // Si los DTOs están en otro proyecto (por ejemplo, Application)
-    var appXmlFile = "Application.xml"; // Ajusta según el nombre del proyecto
+
+    var appXmlFile = "Application.xml";
     var appXmlPath = Path.Combine(AppContext.BaseDirectory, appXmlFile);
     if (File.Exists(appXmlPath))
     {
@@ -115,7 +115,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SplitEasy API v1"));
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ExpenseTracker API v1"));
 }
 
 app.UseHttpsRedirection();

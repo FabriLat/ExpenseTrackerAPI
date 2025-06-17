@@ -43,7 +43,6 @@ namespace Web.Controllers
             TeamDTO? created = _teamService.CreateTeam(createTeamDto, creatorId);
             if (created != null)
             {
-
                 return CreatedAtAction("Get", "Team", new { id = created.Id }, created);
             }
             return BadRequest();
@@ -63,10 +62,10 @@ namespace Web.Controllers
         [HttpGet("{id}")]
         public ActionResult<TeamDTO?> Get(int id)
         {
-            TeamDTO? dto = _teamService.GetById(id);
+            TeamDTO? team = _teamService.GetById(id);
 
-            if (dto != null)
-                return dto;
+            if (team != null)
+                return team;
 
             return NotFound();
         }

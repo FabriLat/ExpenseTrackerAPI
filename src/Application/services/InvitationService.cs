@@ -19,7 +19,6 @@ namespace Application.services
             _userRepository = userRepository;
         }
 
-
         public bool InviteUser(int invitatedId, int ownerId, int teamId)
         {
             Team? team = _teamRepository.GetById(teamId);
@@ -56,7 +55,6 @@ namespace Application.services
             return false;
         }
 
-
         public List<Invitation> GetByUserId(int userId)
         {
             var invitations = _invitationRepository.GetByUserId(userId);
@@ -86,7 +84,6 @@ namespace Application.services
             }
             return false;
         }
-
 
         public bool RejectInvitation(int userId, int invitationId)
         {
