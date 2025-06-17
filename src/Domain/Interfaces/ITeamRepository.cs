@@ -9,9 +9,6 @@ namespace Domain.Interfaces
 {
     public interface ITeamRepository : IBaseRepository<Team>
     {
-        Team? GetByName(string teamName);
-
-        Team? GetByOwnerId(int ownerId);
 
         Team? GetTeamAndUsers(int teamId);
 

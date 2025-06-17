@@ -2,7 +2,6 @@
 using Application.interfaces;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -23,7 +22,7 @@ namespace Web.Controllers
         /// Invita a un usuario a un grupo.
         /// </summary>
         /// <param name="userId">ID del usuario a invitar.</param>
-        /// <param name="groupId">ID del grupo al que se invita.</param>
+        /// <param name="teamId">ID del grupo al que se invita.</param>
         /// <returns>Respuesta exitosa si la invitación se crea correctamente.</returns>
         /// <response code="200">Invitación creada exitosamente.</response>
         /// <response code="400">Datos inválidos o no se pudo crear la invitación.</response>
@@ -33,11 +32,11 @@ namespace Web.Controllers
         /// </remarks>
         [HttpPost("{userId}")]
         [Authorize]
-        public ActionResult Invite(int userId, int groupId)
+        public ActionResult Invite(int userId, int teamId)
         {
             int invitatedId = userId;
             int ownerId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
-           bool invited =  _invitationService.InviteUser(invitatedId, ownerId, groupId);
+           bool invited =  _invitationService.InviteUser(invitatedId, ownerId, teamId);
             if (invited == true)
             {
                 return Ok();

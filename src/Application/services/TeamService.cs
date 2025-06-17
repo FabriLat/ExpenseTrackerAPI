@@ -34,9 +34,7 @@ namespace Application.services
                 newTeam.TeamName = createTeamDto.TeamName.Trim();
                 newTeam.CreatedDate = DateOnly.FromDateTime(DateTime.Today);
                 newTeam.OwnerId = creatorId;
-
                 newTeam.Users.Add(ownerUser);
-
                 _teamRepository.Add(newTeam);
                 return TeamDTO.Create(newTeam);
             }
@@ -95,7 +93,10 @@ namespace Application.services
 
                             team.OwnerId = leaveTeamDTO.NewOwnerId.Value;
                         }
-                        else { return false; }
+                        else
+                        {
+                            return false; 
+                        }
                     }
                     
                     team.Users.Remove(userInTeam);

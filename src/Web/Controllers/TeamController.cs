@@ -64,7 +64,11 @@ namespace Web.Controllers
         public ActionResult<TeamDTO?> Get(int id)
         {
             TeamDTO? dto = _teamService.GetById(id);
-            return dto;
+
+            if (dto != null)
+                return dto;
+
+            return NotFound();
         }
 
 
@@ -91,12 +95,11 @@ namespace Web.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (_teamService.UpdateTeam(id,userId, dto))
+            if (_teamService.UpdateTeam(id, userId, dto))
             {
                 return Ok();
             }
             return Forbid();
-            
         }
 
 
@@ -115,6 +118,9 @@ namespace Web.Controllers
         [Authorize]
         public ActionResult Leave(LeaveTeamDTO leaveTeamDTO)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
             if(_teamService.LeaveTeam(userId, leaveTeamDTO))
             {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Application.dto.request;
+﻿using Application.dto.request;
 using Application.dto.response;
 using Application.interfaces;
 using Domain.Entities;
@@ -57,9 +52,11 @@ namespace Application.services
             var IsPhoneNumberInUse = _userRepository.GetByPhoneNumber(newUserData.PhoneNumber);
 
 
-            if (IsEmailInUse != null || IsPhoneNumberInUse != null)
-                return null;
+            if (IsEmailInUse != null)
+                throw new DuplicateUserDataException("Email");
 
+            if ( IsPhoneNumberInUse != null)
+                throw new DuplicateUserDataException("número de teléfono");
 
             User? userToUpdate = _userRepository.GetById(userId);
             if (userToUpdate != null)
@@ -83,7 +80,7 @@ namespace Application.services
 
             if (users.Count > 0)
             {
-                foreach (var u in users)
+                foreach (User u in users)
                 {
                     UserDTO dto = UserDTO.Create(u);
                     userDTOs.Add(dto);

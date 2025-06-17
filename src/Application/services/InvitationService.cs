@@ -26,6 +26,11 @@ namespace Application.services
             if (team == null)
             { return false; }
 
+            if(team.Users.Count > 5)
+            {
+                return false;
+            }
+
             User? user = _userRepository.GetById(invitatedId);
             if(user == null)
             { return false; }
@@ -81,8 +86,6 @@ namespace Application.services
             }
             return false;
         }
-
-
 
 
         public bool RejectInvitation(int userId, int invitationId)

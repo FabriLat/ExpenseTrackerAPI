@@ -3,7 +3,6 @@ using Application.dto.request;
 using Application.dto.response;
 using Application.interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
@@ -79,11 +78,11 @@ namespace Web.Controllers
                     return CreatedAtAction("Get", "User", new { id = created.Id }, created);
                 }
                 return BadRequest(new { Message = "No se pudo crear el cliente" });
-            }catch (Exception e)
+            }
+            catch(Exception e)
             {
                 return BadRequest(e.Message);
             }
-           
         }
 
 
@@ -109,7 +108,6 @@ namespace Web.Controllers
             if (userData != null)
                 return Ok(userData);
             return BadRequest();
-
         }
 
 

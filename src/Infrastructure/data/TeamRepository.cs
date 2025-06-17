@@ -23,14 +23,5 @@ namespace Infrastructure.data
             Team? team = _context.Teams.Include( t => t.Users ).FirstOrDefault(t => t.IdTeam==teamId);
             return team;
         }
-        public Team? GetByName(string teamName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Team? GetByOwnerId(int ownerId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
