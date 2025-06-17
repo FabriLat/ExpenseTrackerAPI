@@ -1,6 +1,6 @@
 **ExpenseTrackerAPI**
 
-ExpenseTrackerAPI es una API RESTful desarrollada con .NET 9, diseñada para gestionar gastos, equipos e invitaciones con un enfoque en arquitectura limpia y mejores prácticas. Actualmente en desarrollo activo, este proyecto utiliza un enfoque Database First con Entity Framework Core y MySQL, un manejo robusto de excepciones y documentación completa con Swagger para facilitar su uso y pruebas.
+ExpenseTrackerAPI es una API RESTful desarrollada con .NET 9, diseñada para gestionar gastos, equipos e invitaciones con un enfoque en clean architecture y buenas prácticas. Actualmente en desarrollo activo, este proyecto utiliza un enfoque Database First con Entity Framework Core y MySQL, un manejo robusto de excepciones y documentación completa con Swagger para facilitar su uso y pruebas.
 
 
 
