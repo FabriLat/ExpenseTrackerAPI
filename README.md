@@ -11,11 +11,11 @@ ExpenseTrackerAPI es una API RESTful desarrollada con .NET 9, diseñada para ges
 
 
 
-- Crear y gestionar gastos personales y de equipos.
+- Crear y gestionar gastos personales y de grupos.
 
 
 
-- Organizar equipos, enviar invitaciones y manejar la membresía.
+- Organizar grupos, enviar invitaciones y manejar la membresía.
 
 
 
@@ -23,7 +23,7 @@ ExpenseTrackerAPI es una API RESTful desarrollada con .NET 9, diseñada para ges
 
 
 
-- Obtener resúmenes detallados de gastos, incluyendo totales para usuarios individuales o equipos específicos.
+- Obtener resúmenes detallados de gastos, incluyendo totales para usuarios individuales o grupos específicos.
 
 Comparado con mi proyecto anterior (una API de gestión de vehículos con .NET Core, enfoque Code First y sin documentación), ExpenseTrackerAPI incorpora:
 
@@ -60,7 +60,7 @@ Comparado con mi proyecto anterior (una API de gestión de vehículos con .NET C
 
 
 
-- Base de Datos MySQL: Entity Framework Core mapea entidades desde un esquema existente (users, teams, expenses, invitations, users_teams).
+- Base de Datos MySQL: Entity Framework Core mapea entidades desde un esquema existente.
 
 
 
@@ -68,11 +68,11 @@ Comparado con mi proyecto anterior (una API de gestión de vehículos con .NET C
 
 
 
-- Lógica de Negocio: Soporta creación de gastos, gestión de equipos, invitaciones y resúmenes de gastos con validaciones (por ejemplo, asegurando que los usuarios pertenezcan a equipos para gastos de equipo).
+- Lógica de Negocio: Soporta creación de gastos, gestión de grupos, invitaciones y resúmenes de gastos con validaciones (por ejemplo, asegurando que los usuarios pertenezcan a grupos para gastos de grupo).
 
 
 
-En Progreso: Refinando endpoints, agregando pruebas con xUnit y optimizando la lógica de negocio.
+En Progreso: Refinando endpoints, testeando y optimizando la lógica de negocio.
 
 **Estado:**
 
