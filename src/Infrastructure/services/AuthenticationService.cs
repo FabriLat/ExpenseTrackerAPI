@@ -29,7 +29,7 @@ namespace Infrastructure.Services
 
             var user = _userRepository.GetByEmail(authenticationRequest.Email);
             if (user == null) return null;
-            //si es algun usuario se verifica la contraseña sino no.
+
             if (user != null)
             {
                 if (user.Password == authenticationRequest.Password) return user;
@@ -43,32 +43,30 @@ namespace Infrastructure.Services
             
             var user = ValidateUser(authenticationRequest) ?? throw new Exception("not found");
 
-            //Se secreto se guarda en una variable
+
             var securityPassword = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_options.SecretForKey));
 
-            //El secreto se hashea
             var credentials = new SigningCredentials(securityPassword, SecurityAlgorithms.HmacSha256);
 
-            //Se crean los Claims
+
             var claimsForToken = new List<Claim>();
             claimsForToken.Add(new Claim("sub", user.IdUser.ToString()));
             claimsForToken.Add(new Claim("name", user.Name));
 
 
-            //Se crea el jwt
-            var jwtSecurityToken = new JwtSecurityToken(
-                _options.Issuer, //quien lo creo.
-                _options.Audience, //a quien va dirigido.
-                claimsForToken, //el claim.
-                DateTime.UtcNow,
-                DateTime.UtcNow.AddHours(1), //tiempo de vida del token.
-                credentials); //El secreto hasheado.
 
-            //se crea el token de seguridad con el jwt
+            var jwtSecurityToken = new JwtSecurityToken(
+                _options.Issuer, 
+                _options.Audience, 
+                claimsForToken, 
+                DateTime.UtcNow,
+                DateTime.UtcNow.AddHours(1), 
+                credentials); 
+
             var tokenToReturn = new JwtSecurityTokenHandler()
                 .WriteToken(jwtSecurityToken);
 
-            //se retorna el jwt como string
+
             return tokenToReturn.ToString();
         }
 
