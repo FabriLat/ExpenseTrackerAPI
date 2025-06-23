@@ -17,13 +17,13 @@ namespace Application.services
 
         private readonly IExpenseRepository _expenseRepository;
         private readonly IUserService _userService;
-        private readonly ITeamRepository _teamRepository;
+        private readonly ITeamService _teamService;
 
-        public ExpenseService(IExpenseRepository expenseRepository, IUserService userService, ITeamRepository teamRepository)
+        public ExpenseService(IExpenseRepository expenseRepository, IUserService userService, ITeamService teamRepository)
         {
             _expenseRepository = expenseRepository;
             _userService = userService;
-            _teamRepository = teamRepository;
+            _teamService = teamRepository;
         }
 
         public bool AddExpense(CreateExpenseDTO expense, int userId)
@@ -46,7 +46,7 @@ namespace Application.services
             {
                 
                 User? user = _userService.GetByIdCompleteData(userId);
-                Team? team = _teamRepository.GetTeamAndUsers(expense.TeamId);
+                Team? team = _teamService.GetTeamAndUsers(expense.TeamId);
                 if (user == null || team == null)
                     { return false; }
 
@@ -73,7 +73,7 @@ namespace Application.services
 
             if (user != null)
             {
-                Team? team = _teamRepository.GetTeamAndUsers(teamId);
+                Team? team = _teamService.GetTeamAndUsers(teamId);
 
                 if (team != null && team.Users.Contains(user))
                 {
@@ -132,7 +132,7 @@ namespace Application.services
         {
             List<Expense> expenses = _expenseRepository.GetUserExpensesForTeam(userId, teamId);
             User? user = _userService.GetByIdCompleteData(userId);
-            Team? team = _teamRepository.GetTeamAndUsers(teamId);
+            Team? team = _teamService.GetTeamAndUsers(teamId);
 
             if (team == null || user == null || !team.Users.Contains(user))
                 return null;
@@ -170,7 +170,7 @@ namespace Application.services
             if(teamId != null && teamId > 0)
             {
 
-                var team = _teamRepository.GetTeamAndUsers(teamId.Value);
+                var team = _teamService.GetTeamAndUsers(teamId.Value);
 
                 var user = _userService.GetByIdCompleteData(userId);
 
