@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Application.dto.request;
 using Application.dto.response;
+using Domain.Entities;
 
 namespace Application.interfaces
 {
@@ -21,5 +22,9 @@ namespace Application.interfaces
         bool LeaveTeam(int userId, LeaveTeamDTO leaveTeamDTO);
 
         bool RemoveUser(int userId, int teamId, int ownerId);
+
+        Team? GetTeamByIdCompleteData(int teamId);
+
+        Team? GetTeamAndUsers(int teamId);
     }
 }

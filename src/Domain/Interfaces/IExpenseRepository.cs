@@ -22,6 +22,8 @@ namespace Domain.Interfaces
 
         public decimal GetTotalExpensesByUserId(int userId);
 
+        public List<Expense> GetCurrentMonthExpenses(int userId, int month, int year);
+
 
     }
 }

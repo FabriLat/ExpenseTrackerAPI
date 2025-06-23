@@ -9,19 +9,19 @@ namespace Application.services
     {
 
         private readonly IInvitationRepository _invitationRepository;
-        private readonly ITeamRepository _teamRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly ITeamService _teamService;
+        private readonly IUserService _userService;
 
-        public InvitationService(IInvitationRepository invitationRepository, ITeamRepository teamRepository, IUserRepository userRepository)
+        public InvitationService(IInvitationRepository invitationRepository, ITeamService teamRepository, IUserService userRepository)
         {
             _invitationRepository = invitationRepository;
-            _teamRepository = teamRepository;
-            _userRepository = userRepository;
+            _teamService = teamRepository;
+            _userService = userRepository;
         }
 
         public bool InviteUser(int invitatedId, int ownerId, int teamId)
         {
-            Team? team = _teamRepository.GetById(teamId);
+            Team? team = _teamService.GetTeamByIdCompleteData(teamId);
             if (team == null)
             { return false; }
 
@@ -30,7 +30,7 @@ namespace Application.services
                 return false;
             }
 
-            User? user = _userRepository.GetById(invitatedId);
+            User? user = _userService.GetByIdCompleteData(invitatedId);
             if(user == null)
             { return false; }
 

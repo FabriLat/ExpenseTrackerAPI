@@ -190,5 +190,23 @@ namespace Application.services
             decimal totalExpense = _expenseRepository.GetTotalExpensesByUserId(userId);
             return totalExpense;
         }
+
+        public List<ExpenseDTO> GetCurrentMonthExpenses(int userId)
+        {
+            int currentMonth = DateTime.UtcNow.Month;
+            int currentYear = DateTime.UtcNow.Year;
+
+            var expenses =  _expenseRepository.GetCurrentMonthExpenses(userId, currentMonth, currentYear);
+
+            List<ExpenseDTO> expensesDtos = new List<ExpenseDTO>();
+
+            foreach (var e in expenses)
+            {
+                ExpenseDTO dto = ExpenseDTO.Create(e);
+                expensesDtos.Add(dto);
+            }
+            return expensesDtos;
+
+        }
     }
 }

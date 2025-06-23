@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain.Entities;
 using Domain.Interfaces;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Infrastructure.data
 {
@@ -56,6 +57,12 @@ namespace Infrastructure.data
             decimal totalExpenses = _context.Expenses.Where(u => u.UserId == userId && u.TeamId == teamId).Sum(e => e.Amount);
 
             return totalExpenses;
+        }
+
+        public List<Expense> GetCurrentMonthExpenses(int userId, int month, int year)
+        {
+             return  _context.Expenses
+            .Where(e => e.UserId == userId && e.ExpenseDate.Year == year && e.ExpenseDate.Month == month).ToList();
         }
 
 

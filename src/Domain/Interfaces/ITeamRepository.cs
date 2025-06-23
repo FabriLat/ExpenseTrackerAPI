@@ -12,5 +12,7 @@ namespace Domain.Interfaces
 
         Team? GetTeamAndUsers(int teamId);
 
+        Team? GetTeamByIdCompleteData(int teamId);
+
     }
 }

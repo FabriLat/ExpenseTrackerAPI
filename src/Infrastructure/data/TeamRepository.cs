@@ -23,5 +23,11 @@ namespace Infrastructure.data
             Team? team = _context.Teams.Include( t => t.Users ).FirstOrDefault(t => t.IdTeam==teamId);
             return team;
         }
+
+        public Team? GetTeamByIdCompleteData(int teamId)
+        {
+            Team? team = _context.Teams.FirstOrDefault(t => t.IdTeam == teamId);
+            return team;
+        }
     }
 }

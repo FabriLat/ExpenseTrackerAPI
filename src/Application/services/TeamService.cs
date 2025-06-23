@@ -142,6 +142,14 @@ namespace Application.services
             return false;
         }
 
+        public Team? GetTeamByIdCompleteData(int teamId)
+        {
+            return _teamRepository.GetTeamByIdCompleteData(teamId);
+        }
 
+        public Team? GetTeamAndUsers(int teamId)
+        {
+           return _teamRepository.GetTeamAndUsers(teamId);
+        }
     }
 }

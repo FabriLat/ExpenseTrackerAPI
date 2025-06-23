@@ -214,6 +214,26 @@ namespace Web.Controllers
             }
            
         }
-    }
+
+
+
+        /// <summary>
+        /// Obtiene todos los gastos realizados por el usuario autenticado en el mes actual.
+        /// </summary>
+        /// <returns>Lista de gastos del usuario en el mes actual.</returns>
+        /// <response code="200">Gastos del mes actual obtenidos exitosamente.</response>
+        /// <response code="401">No autorizado: se requiere un token JWT válido.</response>
+        /// <remarks>
+        /// Este endpoint requiere autenticación JWT. Devuelve los gastos del usuario autenticado filtrados por el mes y año actuales, basados en la fecha del sistema (UTC).
+        /// </remarks>
+        [HttpGet("[action]")]
+        [Authorize]
+        public ActionResult<List<ExpenseDTO>> GetCurrentMonthExpenses()
+        {
+           int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+           var expenses = _expenseService.GetCurrentMonthExpenses(userId);
+            return Ok(expenses);
+        }
+    }   
 
 }
