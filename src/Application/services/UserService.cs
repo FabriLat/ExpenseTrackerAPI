@@ -107,6 +107,27 @@ namespace Application.services
             return user;
         }
 
+        public List<UserDTO> GetByName(string fullName)
+        {
+
+            var parts = fullName.Trim().Split(' ', 2, StringSplitOptions.RemoveEmptyEntries);
+            string name = parts.Length > 0 ? parts[0].ToLower() : "";
+            string lastName = parts.Length > 1 ? parts[1].ToLower() : "";
+
+            var users = _userRepository.GetByName(name, lastName);
+
+            return users.Select(u => new UserDTO
+            {
+                Id = u.IdUser,
+                Name = u.Name,
+                LastName = u.LastName,
+                PhoneNumber = u.PhoneNumber,
+                Email = u.Email,
+
+
+            }).ToList();
+        }
+
         public bool Delete(int id)
         {
             var user = _userRepository.GetById(id);

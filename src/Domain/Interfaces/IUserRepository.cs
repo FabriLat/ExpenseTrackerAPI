@@ -7,5 +7,8 @@ namespace Domain.Interfaces
         User? GetByEmail(string email);
 
         User? GetByPhoneNumber(string phoneNumber);
+
+
+        List<User> GetByName(string name, string lastName);
     }
 }

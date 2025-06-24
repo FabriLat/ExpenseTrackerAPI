@@ -2,6 +2,7 @@
 using Application.dto.request;
 using Application.dto.response;
 using Application.interfaces;
+using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -72,7 +73,6 @@ namespace Web.Controllers
             try
             {
                 UserDTO? created = _userService.AddUser(newUserData);
-
                 if (created != null)
                 {
                     return CreatedAtAction("Get", "User", new { id = created.Id }, created);
@@ -102,12 +102,17 @@ namespace Web.Controllers
         [Authorize]
         public ActionResult Update(UpdateUserDTO newUserData)
         {
-            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
-            var userData = _userService.UpdateUser(userId, newUserData);
-
-            if (userData != null)
-                return Ok(userData);
-            return BadRequest();
+            try
+            {
+                int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+                var userData = _userService.UpdateUser(userId, newUserData);
+                if (userData != null)
+                    return Ok(userData);
+                return NotFound();
+            }catch(DuplicateUserDataException e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
 
@@ -131,6 +136,22 @@ namespace Web.Controllers
                 return NoContent();
             }
             return BadRequest();
+        }
+
+        /// <summary>
+        /// Obtiene una lista de usuarios que coinciden con el nombre completo proporcionado.
+        /// </summary>
+        /// <param name="fullName">El nombre completo del usuario a buscar.</param>
+        /// <returns>Una lista de objetos UserDTO que coinciden con el nombre proporcionado.</returns>
+        /// <response code="200">Devuelve la lista de usuarios encontrados.</response>
+        /// <remarks>
+        /// Este endpoint no requiere autenticación.
+        /// </remarks>
+        [HttpGet("[action]")]
+        public ActionResult<List<UserDTO>> GetByName(string fullName)
+        {
+            List<UserDTO> users = _userService.GetByName(fullName);
+            return Ok(users);
         }
 
     }

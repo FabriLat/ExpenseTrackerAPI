@@ -25,5 +25,20 @@ namespace Infrastructure.data
             return user;
         }
 
+        public List<User> GetByName(string name, string lastName)
+        {
+            var query = _context.Users.AsQueryable();
+
+            if (!string.IsNullOrEmpty(name))
+                query = query.Where(u => u.Name.ToLower().Contains(name) || u.LastName.ToLower().Contains(name));
+
+            if (!string.IsNullOrEmpty(lastName))
+                query = query.Where(u => u.LastName.ToLower().Contains(lastName));
+
+            return query.ToList();
+        }
+
+
+
     }
 }

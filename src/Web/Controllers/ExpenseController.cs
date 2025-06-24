@@ -231,6 +231,8 @@ namespace Web.Controllers
         public ActionResult<List<ExpenseDTO>> GetCurrentMonthExpenses()
         {
            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+           
+            
            var expenses = _expenseService.GetCurrentMonthExpenses(userId);
             return Ok(expenses);
         }

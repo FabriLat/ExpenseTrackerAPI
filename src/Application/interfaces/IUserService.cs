@@ -16,6 +16,8 @@ namespace Application.interfaces
 
         UserDTO? UpdateUser(int userId, UpdateUserDTO newUserData);
 
+        List<UserDTO> GetByName(string fullName);
+
         bool Delete(int id);
     }
 }
