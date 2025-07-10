@@ -91,6 +91,16 @@ namespace Application.services
         }
 
 
+        public decimal GetTotalLastMonthExpenses(int userId)
+        {
+            List<ExpenseDTO> expenses = GetCurrentMonthExpenses(userId);
+
+            decimal total = expenses.Sum(e => e.Amount);
+            return total;
+        }
+
+
+
 
         public List<ExpenseDTO> GetExpenses(int userId)
         {

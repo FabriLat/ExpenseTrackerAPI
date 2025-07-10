@@ -61,6 +61,35 @@ namespace Web.Controllers
 
 
         /// <summary>
+        /// Obtiene el total de TODOS los gastos del usuario en el mes actual.
+        /// </summary>
+        /// <returns>El total de lo gastado el mes actual</returns>
+        /// <response code="200">Devuelve el total de gastos.</response>
+        /// <response code="400">Error al obtener el total de los gastos o ID de usuario inválido.</response>
+        /// <response code="401">No autorizado: se requiere un token JWT válido.</response>
+        /// <remarks>
+        /// Este endpoint requiere autenticación JWT.
+        /// </remarks>
+        [HttpGet("[action]")]
+        [Authorize]
+        public ActionResult GetTotalLastMonthExpenses() 
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+
+            try
+            {
+                decimal lastMonthTotal = _expenseService.GetTotalLastMonthExpenses(userId);
+                return Ok(lastMonthTotal);
+
+            }catch(Exception e)
+            {
+                return BadRequest($"{e.Message}");
+            }
+
+        }
+
+
+        /// <summary>
         /// Obtiene todos los gastos de un usuario autenticado.
         /// </summary>
         /// <returns>Una lista de gastos del usuario.</returns>

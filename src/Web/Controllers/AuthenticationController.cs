@@ -11,12 +11,10 @@ namespace Web.Controllers
     {
         private IAuthenticationService _authenticationService;
 
-        private readonly IConfiguration _config;
 
-        public AuthenticationController(IAuthenticationService authenticationService, IConfiguration config)
+        public AuthenticationController(IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService;
-            _config = config;
         }
 
         /// <summary>
