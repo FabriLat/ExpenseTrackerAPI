@@ -165,9 +165,17 @@ namespace Application.services
         public bool DeleteExpense(int expenseId, int userId)
         {
             var expense = _expenseRepository.GetById(expenseId);
+            int ownerTeamId;
+            TeamDTO? currentTeam = null;
             if (expense != null)
             {
-                if (expense.UserId == userId)
+                if(expense.TeamId != null && expense.TeamId != 0)
+                {
+                    currentTeam = _teamService.GetById(expense.TeamId.Value);
+                    ownerTeamId = currentTeam.ownerId;
+
+                }
+                if (expense.UserId == userId || currentTeam.ownerId == userId)
                 {
                     _expenseRepository.Delete(expense);
                     return true;
