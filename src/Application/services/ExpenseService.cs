@@ -7,6 +7,7 @@ using Application.dto.request;
 using Application.dto.response;
 using Application.interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Exceptions;
 using Domain.Interfaces;
 
@@ -35,8 +36,9 @@ namespace Application.services
             Expense newExpense = new Expense();
             newExpense.UserId = userId;
             newExpense.Amount = expense.Amount;
-            newExpense.ExpenseName = expense.ExpenseName;
-            newExpense.Description = expense.Description;
+            newExpense.ExpenseName = ((CategoriesEnum)expense.CategoryId-1).ToString();
+            newExpense.Description = expense.ExpenseDescription;
+            newExpense.CategoryId = expense.CategoryId;
 
             if (expense.TeamId <= 0)
             {

@@ -11,16 +11,14 @@ namespace Application.dto.request
 {
     public class CreateExpenseDTO
     {
+        [Required]
+        public int CategoryId { get; set; }
+
+        [StringLength(155)]
+        public string? ExpenseDescription { get; set; }
 
         [Required]
         public decimal Amount { get; set; }
-
-        [StringLength(45)]
-        [Required]
-        public string ExpenseName { get; set; } = null!;
-
-        [StringLength(155)]
-        public string? Description { get; set; }
 
         public int TeamId { get; set; } = 0;
     }

@@ -36,7 +36,7 @@ namespace Application.services
 
 
             List<Invitation> userInvitations = _invitationRepository.GetByUserId(invitatedId);
-            int alreadyInvited = userInvitations.Where(u => u.TeamId == teamId && u.State == InvitationState.Pending).Count();
+            int alreadyInvited = userInvitations.Where(u => u.TeamId == teamId && u.State == 0).Count();
 
             if (alreadyInvited > 0)
             {
@@ -58,7 +58,7 @@ namespace Application.services
         public List<Invitation> GetByUserId(int userId)
         {
             var invitations = _invitationRepository.GetByUserId(userId);
-            List<Invitation> pendingInvitations = invitations.Where(i => i.State == InvitationState.Pending).ToList();
+            List<Invitation> pendingInvitations = invitations.Where(i => i.State == 0).ToList();
             return pendingInvitations;
         }
 
@@ -74,9 +74,9 @@ namespace Application.services
             if (invitation != null && user != null)
             {
                 var team = invitation.Team;
-                if (invitation.InvitedUserId == userId && invitation.State == InvitationState.Pending && team.Users.Count() < 5)
+                if (invitation.InvitedUserId == userId && invitation.State == 0 && team.Users.Count() < 5)
                 {
-                    invitation.State = InvitationState.Accepted;
+                    invitation.State = 1;
                     invitation.Team.Users.Add(user);
                     _invitationRepository.Update(invitation);
                     return true;
@@ -91,7 +91,7 @@ namespace Application.services
             
             if( invitation != null && invitation.InvitedUserId == userId)
             {
-                invitation.State = InvitationState.Rejected;
+                invitation.State = 2;
                 _invitationRepository.Update(invitation);
                 return true;
             }

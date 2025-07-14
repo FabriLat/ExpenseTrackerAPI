@@ -11,7 +11,7 @@ namespace Application.dto.response
     {
         public int Id {  get; set; }
 
-        public string ExpenseName {  get; set; }
+        public string ExpenseCategory {  get; set; }
 
         public string? Description { get; set; }
 
@@ -27,7 +27,7 @@ namespace Application.dto.response
         {
             var expenseDTO = new ExpenseDTO();
             expenseDTO.Id = expense.IdExpense;
-            expenseDTO.ExpenseName = expense.ExpenseName;
+            expenseDTO.ExpenseCategory = expense.ExpenseName;
             expenseDTO.Description = expense.Description;
             expenseDTO.Amount = expense.Amount;
             expenseDTO.ExpenseDate = expense.ExpenseDate;
