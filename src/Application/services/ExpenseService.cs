@@ -165,7 +165,7 @@ namespace Application.services
         public bool DeleteExpense(int expenseId, int userId)
         {
             var expense = _expenseRepository.GetById(expenseId);
-            int ownerTeamId;
+            int? ownerTeamId;
             TeamDTO? currentTeam = null;
             if (expense != null)
             {

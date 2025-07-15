@@ -70,19 +70,13 @@ namespace Web.Controllers
             {
                 return BadRequest(ModelState);
             }
-            try
+            UserDTO? created = _userService.AddUser(newUserData);
+            if (created != null)
             {
-                UserDTO? created = _userService.AddUser(newUserData);
-                if (created != null)
-                {
-                    return CreatedAtAction("Get", "User", new { id = created.Id }, created);
-                }
-                return BadRequest(new { Message = "No se pudo crear el cliente" });
+                return CreatedAtAction("Get", "User", new { id = created.Id }, created);
             }
-            catch(Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return BadRequest(new { Message = "No se pudo crear el cliente" });
+            
         }
 
 
@@ -102,17 +96,13 @@ namespace Web.Controllers
         [Authorize]
         public ActionResult Update(UpdateUserDTO newUserData)
         {
-            try
-            {
-                int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
-                var userData = _userService.UpdateUser(userId, newUserData);
-                if (userData != null)
-                    return Ok(userData);
-                return NotFound();
-            }catch(DuplicateUserDataException e)
-            {
-                return BadRequest(e.Message);
-            }
+
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            var userData = _userService.UpdateUser(userId, newUserData);
+            if (userData != null)
+                return Ok(userData);
+            return NotFound();
+
         }
 
 

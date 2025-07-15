@@ -230,18 +230,11 @@ namespace Web.Controllers
         [Authorize]
         public ActionResult<decimal> GetTotalExpensesByUser(int? teamId)
         {
-            try
-            {
                 int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
 
                 decimal totalExpenses = _expenseService.GetTotalExpensesByUser(userId, teamId);
 
-                return Ok(totalExpenses);
-            }catch(NotUserInTeamException e)
-            {
-                return BadRequest(e.Message);
-            }
-           
+                return Ok(totalExpenses);         
         }
 
 

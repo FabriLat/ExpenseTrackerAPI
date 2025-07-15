@@ -31,16 +31,8 @@ namespace Web.Controllers
         [HttpPost]
         public ActionResult<string> Authenticate([FromBody] AuthenticationRequest authenticationRequest)
         {
-            try
-            {
-                //Llama a un metodo que devuelve un string-Token
                 string token = _authenticationService.Authenticate(authenticationRequest);
                 return Ok(token);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
         }
     }
 }
