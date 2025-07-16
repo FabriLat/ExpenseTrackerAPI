@@ -26,5 +26,7 @@ namespace Application.interfaces
         Team? GetTeamByIdCompleteData(int teamId);
 
         Team? GetTeamAndUsers(int teamId);
+
+        List<TeamDTO> GetTeamsByUserId(int userId);
     }
 }

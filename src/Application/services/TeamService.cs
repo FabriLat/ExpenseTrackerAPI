@@ -16,12 +16,12 @@ namespace Application.services
 
         private readonly ITeamRepository _teamRepository;
         private readonly IUserService _userService;
-        
+
         public TeamService(ITeamRepository teamRepository, IUserService userService)
-            {
-                _teamRepository = teamRepository;
-                _userService = userService;
-            }
+        {
+            _teamRepository = teamRepository;
+            _userService = userService;
+        }
 
         public TeamDTO? CreateTeam(CreateTeamDTO createTeamDto, int creatorId)
         {
@@ -44,7 +44,7 @@ namespace Application.services
         public TeamDTO? GetById(int id)
         {
             Team? team = _teamRepository.GetById(id);
-            if(team != null)
+            if (team != null)
             {
                 TeamDTO dto = TeamDTO.Create(team);
                 return dto;
@@ -75,30 +75,30 @@ namespace Application.services
             int teamId = leaveTeamDTO.TeamId;
             Team? team = _teamRepository.GetTeamAndUsers(teamId);
 
-            if(team != null)
+            if (team != null)
             {
                 var userInTeam = team.Users.FirstOrDefault(u => u.IdUser == userId);
 
-                if(userInTeam != null)
+                if (userInTeam != null)
                 {
-                    if(userInTeam.IdUser == team.OwnerId)
+                    if (userInTeam.IdUser == team.OwnerId)
                     {
                         if (!leaveTeamDTO.NewOwnerId.HasValue)
                             return false;
 
                         var newOwnerInGroup = team.Users.FirstOrDefault(u => u.IdUser == leaveTeamDTO.NewOwnerId);
 
-                        if(newOwnerInGroup != null)
+                        if (newOwnerInGroup != null)
                         {
 
                             team.OwnerId = leaveTeamDTO.NewOwnerId.Value;
                         }
                         else
                         {
-                            return false; 
+                            return false;
                         }
                     }
-                    
+
                     team.Users.Remove(userInTeam);
                     _teamRepository.Update(team);
                     return true;
@@ -114,7 +114,7 @@ namespace Application.services
 
             if (teamToDelete != null)
             {
-                if(teamToDelete.OwnerId == userId)
+                if (teamToDelete.OwnerId == userId)
                 {
                     _teamRepository.Delete(teamToDelete);
                     return true;
@@ -130,13 +130,13 @@ namespace Application.services
             User? userToRemove = _userService.GetByIdCompleteData(userId);
             if (team != null && userToRemove != null && team.OwnerId == ownerId)
             {
-               
-               if (team.Users.Contains(userToRemove))
-               {
+
+                if (team.Users.Contains(userToRemove))
+                {
                     team.Users.Remove(userToRemove);
                     _teamRepository.Update(team);
                     return true;
-               }
+                }
 
             }
             return false;
@@ -149,7 +149,18 @@ namespace Application.services
 
         public Team? GetTeamAndUsers(int teamId)
         {
-           return _teamRepository.GetTeamAndUsers(teamId);
+            return _teamRepository.GetTeamAndUsers(teamId);
+        }
+
+        public List<TeamDTO> GetTeamsByUserId(int userId)
+        {
+            List<Team> teams = _teamRepository.GetByUserId(userId);
+            List<TeamDTO> teamDtos = new List<TeamDTO>();
+            foreach (var team in teams)
+            {
+                teamDtos.Add(TeamDTO.Create(team));
+            }
+            return teamDtos;
         }
     }
 }

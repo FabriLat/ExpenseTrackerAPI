@@ -20,7 +20,7 @@ namespace Infrastructure.data
 
         public Team? GetTeamAndUsers(int teamId)
         {
-            Team? team = _context.Teams.Include( t => t.Users ).FirstOrDefault(t => t.IdTeam==teamId);
+            Team? team = _context.Teams.Include(t => t.Users).FirstOrDefault(t => t.IdTeam == teamId);
             return team;
         }
 
@@ -28,6 +28,15 @@ namespace Infrastructure.data
         {
             Team? team = _context.Teams.FirstOrDefault(t => t.IdTeam == teamId);
             return team;
+        }
+
+        public List<Team> GetByUserId(int userId)
+        {
+            var teams = _context.Teams
+                .Include(t => t.Users)
+                .Where(t => t.Users.Any(u => u.IdUser == userId))
+                .ToList();
+            return teams;
         }
     }
 }

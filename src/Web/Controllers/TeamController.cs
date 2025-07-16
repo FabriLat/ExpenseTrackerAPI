@@ -70,7 +70,28 @@ namespace Web.Controllers
             return NotFound();
         }
 
-
+        /// <summary>
+        /// Obtiene los grupos a los que pertenece el usuario autenticado.
+        /// </summary>
+        /// <returns>Lista de grupos en los que está el usuario autenticado.</returns>
+        /// <response code="200">Lista de grupos devuelta exitosamente.</response>
+        /// <response code="404">No se encontraron grupos para el usuario.</response>
+        /// <response code="401">El usuario no está autenticado.</response>
+        /// <remarks>
+        /// Este endpoint requiere autenticación JWT.
+        /// </remarks>
+        [HttpGet("")]
+        [Authorize]
+        public ActionResult<List<TeamDTO>> GetTeamsByUserId()
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            var teams = _teamService.GetTeamsByUserId(userId);
+            if (teams != null && teams.Count > 0)
+            {
+                return Ok(teams);
+            }
+            return NotFound();
+        }
 
         /// <summary>
         /// Actualiza un grupo existente.

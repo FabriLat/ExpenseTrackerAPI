@@ -57,6 +57,7 @@ namespace Web.Controllers
         /// <param name="newUserData">Datos del nuevo usuario.</param>
         /// <returns>El usuario creado.</returns>
         /// <response code="201">Usuario creado exitosamente.</response>
+        /// <response code="403">Datos inválidos o usuario con sesión iniciada.</response>
         /// <response code="400">Datos inválidos o error al crear el usuario.</response>
         /// <remarks>
         /// Este endpoint solo permite acceso a usuarios no autenticados (política "AnonymousOnly").
