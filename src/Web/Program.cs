@@ -18,6 +18,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 
+//Habilita el cors para que se pueda usar en el front.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:5173", "http://localhost:5174", "http://localhost:5175")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -118,6 +130,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ExpenseTracker API v1"));
 }
+
+app.UseCors("AllowLocalhost");
 
 app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionHandlingMiddleware>();

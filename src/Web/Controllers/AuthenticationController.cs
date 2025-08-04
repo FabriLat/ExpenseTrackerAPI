@@ -32,6 +32,10 @@ namespace Web.Controllers
         public ActionResult<string> Authenticate([FromBody] AuthenticationRequest authenticationRequest)
         {
                 string token = _authenticationService.Authenticate(authenticationRequest);
+                if (string.IsNullOrEmpty(token))
+                {
+                    return BadRequest("Invalid credentials or authentication failed.");
+                }
                 return Ok(token);
         }
     }

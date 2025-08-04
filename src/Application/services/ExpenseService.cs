@@ -228,5 +228,44 @@ namespace Application.services
             return expensesDtos;
 
         }
+
+        public List<ExpenseDTO> GetByCategory(int userId, int teamId, string category)
+        {
+            
+            if(teamId > 0)
+            {
+                var team = _teamService.GetTeamAndUsers(teamId);
+                var user = _userService.GetByIdCompleteData(userId);
+                if (user != null && team != null)
+                {
+                    if (team.Users.Contains(user))
+                    {
+                        var expenses = _expenseRepository.GetByCategory(userId, teamId,  category);
+                        List<ExpenseDTO> expensesDtos = new List<ExpenseDTO>();
+                        foreach (var e in expenses)
+                        {
+                            ExpenseDTO dto = ExpenseDTO.Create(e);
+                            expensesDtos.Add(dto);
+                        }
+                        return expensesDtos;
+                    }
+
+                }
+                    throw new NotUserInTeamException();
+            }
+
+            var userExpenses = _expenseRepository.GetByCategory(userId, category);
+            if (userExpenses.Count > 0)
+            {
+                List<ExpenseDTO> expensesDtos = new List<ExpenseDTO>();
+                foreach (var e in userExpenses)
+                {
+                    ExpenseDTO dto = ExpenseDTO.Create(e);
+                    expensesDtos.Add(dto);
+                }
+                return expensesDtos;
+            }
+            return [];
+        }
     }
 }

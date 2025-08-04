@@ -38,10 +38,14 @@ namespace Infrastructure.Services
             return null;
         }
 
-        public string Authenticate(AuthenticationRequest authenticationRequest)
+        public string? Authenticate(AuthenticationRequest authenticationRequest)
         {
-            
-            var user = ValidateUser(authenticationRequest) ?? throw new Exception("not found");
+
+            var user = ValidateUser(authenticationRequest) ?? null;
+            if (user == null)
+            {
+                return null;
+            }
 
 
             var securityPassword = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_options.SecretForKey));
@@ -52,6 +56,10 @@ namespace Infrastructure.Services
             var claimsForToken = new List<Claim>();
             claimsForToken.Add(new Claim("sub", user.IdUser.ToString()));
             claimsForToken.Add(new Claim("name", user.Name));
+            claimsForToken.Add(new Claim("lastName", user.LastName));
+            claimsForToken.Add(new Claim("email", user.Email));
+            claimsForToken.Add(new Claim("phoneNumber", user.PhoneNumber));
+
 
 
 

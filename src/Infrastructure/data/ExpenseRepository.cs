@@ -65,7 +65,23 @@ namespace Infrastructure.data
             .Where(e => e.UserId == userId && e.ExpenseDate.Year == year && e.ExpenseDate.Month == month).ToList();
         }
 
+        public List<Expense> GetByCategory(int userId, string category)
+        {
+            List<Expense> expenses = _context.Expenses
+                .Where(e =>e.UserId == userId && e.Category.CategoryName == category)
+                .ToList();
+            return expenses;
+        }
+
+        public List<Expense> GetByCategory(int userId, int teamId, string category)
+        {
+            List<Expense> expenses = _context.Expenses
+                .Where(e => e.Category.CategoryName == category && e.TeamId == teamId).ToList();
+
+            return expenses;
+        }
 
 
-    }
+
+        }
 }

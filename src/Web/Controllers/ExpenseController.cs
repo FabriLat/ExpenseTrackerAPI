@@ -258,6 +258,32 @@ namespace Web.Controllers
            var expenses = _expenseService.GetCurrentMonthExpenses(userId);
             return Ok(expenses);
         }
+
+
+
+        /// <summary>
+        /// Obtiene los gastos filtrados por categoría.
+        /// </summary>
+        /// <param name="teamId">
+        /// ID del equipo.  
+        /// - Si es 0, se devuelven los gastos personales del usuario autenticado.  
+        /// - Si es distinto de 0, se devuelven todos los gastos de esa categoría pertenecientes al equipo.
+        /// </param>
+        /// <param name="categoryName">
+        /// Nombre de la categoría por la cual filtrar los gastos.
+        /// </param>
+        /// <returns>Una lista de gastos filtrados por categoría.</returns>
+        /// <response code="200">Lista de gastos devuelta correctamente.</response>
+        /// <response code="401">No autorizado. El usuario no tiene un token válido.</response>
+        [HttpGet("[action]/{teamId}")]
+        [Authorize]
+        public ActionResult<List<ExpenseDTO>> GetExpensesByCategory(int teamId, string categoryName)
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            List<ExpenseDTO> expenses = _expenseService.GetByCategory(userId, teamId, categoryName);
+            return expenses;
+
+        }
     }   
 
 }

@@ -27,5 +27,7 @@ namespace Application.interfaces
         List<ExpenseDTO> GetCurrentMonthExpenses(int userId);
 
         decimal GetTotalLastMonthExpenses(int userId);
+
+        List<ExpenseDTO> GetByCategory(int userId, int teamId, string category);
     }
 }

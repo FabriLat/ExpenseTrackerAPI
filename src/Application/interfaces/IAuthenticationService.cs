@@ -9,7 +9,7 @@ namespace Application.interfaces
 {
     public interface IAuthenticationService
     {
-        string Authenticate(AuthenticationRequest authenticationRequest);
+        string? Authenticate(AuthenticationRequest authenticationRequest);
      
     }
 }

@@ -24,6 +24,10 @@ namespace Domain.Interfaces
 
         public List<Expense> GetCurrentMonthExpenses(int userId, int month, int year);
 
+        public List<Expense> GetByCategory(int userId, string category);
+
+        public List<Expense> GetByCategory(int userId, int teamId, string category);
+
 
     }
 }
