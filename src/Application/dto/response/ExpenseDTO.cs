@@ -21,6 +21,8 @@ namespace Application.dto.response
 
         public int? teamId { get; set; }
 
+        public int userId { get; set; }
+
 
 
         public static ExpenseDTO Create(Expense expense)
@@ -32,6 +34,7 @@ namespace Application.dto.response
             expenseDTO.Amount = expense.Amount;
             expenseDTO.ExpenseDate = expense.ExpenseDate;
             expenseDTO.teamId = expense.TeamId;
+            expenseDTO.userId = expense.UserId;
             return expenseDTO;
         }
 

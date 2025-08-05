@@ -114,6 +114,7 @@ namespace Application.services
                 List<ExpenseDTO> dtos = new List<ExpenseDTO>();
                 foreach (var e in expenses)
                 {
+                    Console.WriteLine($"username: {e.User}");
                    ExpenseDTO dto = ExpenseDTO.Create(e);
                     dtos.Add(dto);
                 }
